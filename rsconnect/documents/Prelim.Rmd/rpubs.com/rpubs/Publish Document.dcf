@@ -1,0 +1,7 @@
+name: Publish Document
+account: rpubs
+server: rpubs.com
+bundleId:
+        https://api.rpubs.com/api/v1/document/126618/3385eb9173744e55ab9db2b8e3cd58d9
+url: http://rpubs.com/HunterRatliff1/126618
+when: 1447774109.30748

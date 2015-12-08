@@ -1,0 +1,89 @@
+"","Location","Race","Sex","Yes","No"
+"1","Welch","Asian","Men",8,14
+"2","Welch","Black","Men",0,0
+"3","Welch","Hispanic (any combination)","Men",3,8
+"4","Welch","White","Men",21,38
+"5","Welch","Asian","Women",9,12
+"6","Welch","Black","Women",4,5
+"7","Welch","Hispanic (any combination)","Women",10,11
+"8","Welch","White","Women",12,18
+"9","Burdine","Asian","Men",9,10
+"10","Burdine","Black","Men",1,1
+"11","Burdine","Hispanic (any combination)","Men",6,5
+"12","Burdine","White","Men",15,37
+"13","Burdine","Asian","Women",9,9
+"14","Burdine","Black","Women",3,4
+"15","Burdine","Hispanic (any combination)","Women",5,8
+"16","Burdine","White","Women",31,29
+"17","RLM","Asian","Men",8,9
+"18","RLM","Black","Men",1,3
+"19","RLM","Hispanic (any combination)","Men",6,13
+"20","RLM","White","Men",15,40
+"21","RLM","Asian","Women",8,11
+"22","RLM","Black","Women",4,3
+"23","RLM","Hispanic (any combination)","Women",6,7
+"24","RLM","White","Women",27,18
+"25","GDC","Asian","Men",4,16
+"26","GDC","Black","Men",2,1
+"27","GDC","Hispanic (any combination)","Men",8,7
+"28","GDC","White","Men",14,15
+"29","GDC","Asian","Women",10,15
+"30","GDC","Black","Women",1,1
+"31","GDC","Hispanic (any combination)","Women",8,11
+"32","GDC","White","Women",29,25
+"33","Painter","Asian","Men",3,12
+"34","Painter","Black","Men",0,1
+"35","Painter","Hispanic (any combination)","Men",12,8
+"36","Painter","White","Men",15,38
+"37","Painter","Asian","Women",9,13
+"38","Painter","Black","Women",1,0
+"39","Painter","Hispanic (any combination)","Women",13,10
+"40","Painter","White","Women",12,26
+"41","CLA","Asian","Men",10,11
+"42","CLA","Black","Men",1,2
+"43","CLA","Hispanic (any combination)","Men",9,13
+"44","CLA","White","Men",15,41
+"45","CLA","Asian","Women",9,5
+"46","CLA","Black","Women",2,4
+"47","CLA","Hispanic (any combination)","Women",12,14
+"48","CLA","White","Women",25,22
+"49","West mall","Asian","Men",10,7
+"50","West mall","Black","Men",2,1
+"51","West mall","Hispanic (any combination)","Men",9,10
+"52","West mall","White","Men",12,27
+"53","West mall","Asian","Women",6,9
+"54","West mall","Black","Women",2,1
+"55","West mall","Hispanic (any combination)","Women",12,12
+"56","West mall","White","Women",25,34
+"57","McCombs","Asian","Men",4,10
+"58","McCombs","Black","Men",2,0
+"59","McCombs","Hispanic (any combination)","Men",9,15
+"60","McCombs","White","Men",11,16
+"61","McCombs","Asian","Women",4,9
+"62","McCombs","Black","Women",2,5
+"63","McCombs","Hispanic (any combination)","Women",11,11
+"64","McCombs","White","Women",19,15
+"65","Main mall","Asian","Men",8,10
+"66","Main mall","Black","Men",1,2
+"67","Main mall","Hispanic (any combination)","Men",4,18
+"68","Main mall","White","Men",26,22
+"69","Main mall","Asian","Women",5,10
+"70","Main mall","Black","Women",1,4
+"71","Main mall","Hispanic (any combination)","Women",11,10
+"72","Main mall","White","Women",19,19
+"73","Jester","Asian","Men",11,5
+"74","Jester","Black","Men",0,1
+"75","Jester","Hispanic (any combination)","Men",9,14
+"76","Jester","White","Men",11,28
+"77","Jester","Asian","Women",8,7
+"78","Jester","Black","Women",1,6
+"79","Jester","Hispanic (any combination)","Women",6,17
+"80","Jester","White","Women",27,33
+"81","UTC","Asian","Men",5,12
+"82","UTC","Black","Men",1,0
+"83","UTC","Hispanic (any combination)","Men",9,10
+"84","UTC","White","Men",10,29
+"85","UTC","Asian","Women",3,5
+"86","UTC","Black","Women",4,2
+"87","UTC","Hispanic (any combination)","Women",12,12
+"88","UTC","White","Women",12,31

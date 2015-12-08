@@ -1,0 +1,437 @@
+```{r global_options, include=FALSE}
+require(knitr)
+
+# setwd("~/Github/Geni Project")
+# opts_knit$set(root.dir = "..")
+
+## Sets output for figures and other globals
+knitr::opts_chunk$set(fig.width=7, fig.height=7, fig.path='Figures/',
+                      echo=TRUE, warning=FALSE, message=FALSE, fig.align='center')
+
+# Packages
+packs <- c("magrittr", "dplyr", "reshape2", "ggplot2", "RCurl", "ggthemes")
+sapply(packs, require, character.only=TRUE)  
+
+# Define theme for ggplots
+source("theme_UT.R")
+```
+```{r Load data, include=F}
+# Import (i.e. 'read') our data into R as a data.frame
+Obs <- read.csv("~/Github/Geni Project/Obs.csv")
+Obs$X <- NULL
+```
+
+
+Who Listens To Music?
+========================================================
+author: Genevieve Korst 
+date: December 5, 2015
+font-family: 'Open Sans'
+
+
+<div class="footer">http://rpubs.com/HunterRatliff1/133534</div>
+
+
+
+
+Motivation: Topic
+========================================================
+**Why did you pick the topic you chose?**
+
+- I enjoy observing people in social situations
+- I always listen to music when I walk to class, 
+- I’ve noticed that not everyone always does, 
+- I want to see if there was a specific group or 
+demographic that did that more than others.
+
+
+Motivation: Topic
+========================================================
+**What were you interested in investigating?**
+
+The differences in pre-class habits among different 
+demographics.
+
+**What relationships did you hypothesize would exist among your variables?**
+
+I hypothesized that women would be more likely to listen 
+to music while walking to class, but I didn’t think 
+there would be a relationship between race/ethnicity 
+and whether or not they listened to music.
+
+
+
+
+
+
+
+Data Collection: Randomization
+========================================================
+**What did you do to get as “random” a sample as possible?**
+
+I observed the students rather than surveyed them in order 
+to prevent volunteer bias. I spread out my observations 
+over multiple days and various locations in order to 
+create a large enough and varied enough sample to 
+control for selection bias.
+
+
+Data Collection: Records
+========================================================
+**How many sample records did you end up with**
+
+```{r, include=FALSE}
+# group_by(Obs_df, Race, Sex) %>%
+#   summarise(
+#     Obs.n    = sum(Total.Obser),
+#     Yes.avg  = mean(Yes.percent),
+#     Yes.med  = median(Yes.percent),
+#     Yes.min  = min(Yes.percent),
+#     Yes.max  = max(Yes.percent),
+#     Yes.var  = var(Yes.percent),
+#     Yes.sd   = sd(Yes.percent)) %>% 
+#   
+#   ungroup()
+```
+
+The total record count was 
+<code> `r sum(Obs$Yes) + sum(Obs$No)`</code>, 
+with an overall breakdown of:
+
+* <b>Yes:</b> <code> `r sum(Obs$Yes)` </code>
+* <b>No:</b> <code> `r sum(Obs$No)` </code>
+
+
+Data Collection: Outliers
+========================================================
+**Did you remove any outliers?** No, I saw no need to remove any outliers
+
+```{r Fig01_A, echo=F}
+# Fig01_A
+qplot(data=Obs, x=Yes, y=No, color=Sex) + 
+  labs(x="Count of Students Wearing Headphones", y="Count of Students NOT\nWearing Headphones",
+       title="Count of Groups\nBy Sex") + scale_color_wsj() + theme_UT() #+ coord_fixed()
+```  
+
+```{r Fig01_B, echo=FALSE, eval=FALSE}
+# Fig01_B
+qplot(data=Obs, x=Yes, y=No, color=Race) + 
+  labs(x="Count of Students Wearing Headphones", y="Count of Students NOT\nWearing Headphones",
+       title="Count of Groups\nBy Race/Ethnicity") + theme_UT() + scale_color_gdocs() + coord_fixed()
+```
+
+
+
+
+
+
+Results table
+========================================================
+
+**Report the results of your model in a table.**  
+*The table will look different depending on whether 
+you ran an ANOVA or a GLM, but be sure you include 
+the appropriate estimates/sums of squares and test 
+statistics for each explanatory variable and interaction 
+term, along with an appropriate measure of how well the 
+model fits the data.*
+```{r Build Obs_df, echo=FALSE}
+### Given our data frame ---------------------------------
+# ## Visualize the data as if it were a table ()
+Obs_df <- Obs %>%             # Save the result as 'Obs_df'
+  
+  mutate(                         # Add these two variables
+    Total.Obser = 0 + Yes + No, 
+    Yes.percent = Yes / Total.Obser)
+
+## Because we had a divide by zero error, replace
+## all cases of NA in the data.frame with 0
+Obs_df[is.na(Obs_df)] <- 0
+```
+
+
+Results table: GLM
+========================================================
+
+<small>
+```{r GLM, echo=F}
+## General Linear Model  ---------------------------------
+glm(Yes.percent ~ Race + Sex, weights = Total.Obser,
+    data = Obs_df) %>% 
+  summary()
+```
+</small>
+
+
+Results table: ANOVA
+========================================================
+<small>
+```{r ANOVA, echo=F}
+## General Linear Model  ---------------------------------
+aov(Yes.percent ~ Race + Sex, weights = Total.Obser,
+    data = Obs_df) %>% 
+  summary()
+```
+</small>
+
+
+Method: GLM/ANOVA
+========================================================
+**What software did you use?  What function(s)?**
+
+I used RStudio to in my analysis, utilizing the 
+following packages
+
+<code> `r packs` </code>
+
+**Response variable:** The proportion of the population 
+that listens to music on the way to class or not.
+
+**Explanatory variables:** 
+
+1. Race/ethnicity
+2. Gender
+
+
+
+
+
+
+Method: Response Variable
+========================================================
+
+**Description:** 
+The response variable is the proportion of students 
+listening to music on the way to class, as well as 
+the proportion of students not listening to music. I 
+made a table that had a column for each potential 
+response of the ethnicities and genders and whether 
+they listened to music. 
+
+**Method of measurement:** It was measured by 
+observing the students at each of the locations 
+and marking down a tally in each of the specific
+columns. 
+
+**Units:**: Count of people
+
+Method: Explanatory Variables
+========================================================
+*Briefly describe your explanatory variables, how 
+they were measured, and their units (if applicable).*
+
+**Race/Ethnicity:** The race and/or ethnicity of each 
+student observed. For simplicity, I made the best 
+approximation that I could of their combined race and 
+ethnicity of the student. Students fell into four 
+broad catagories:
+
+1. Asian (hispanic and non-hispanic)
+2. Black (hispanic and non-hispanic)
+3. Hispanic (and white)
+4. White (non-hispanic)
+
+
+
+
+
+
+
+
+Method: Explanatory Variables
+========================================================
+*Briefly describe your explanatory variables, how 
+they were measured, and their units (if applicable).*
+
+**Sex:** The biological sex of student observed (male 
+or female). 
+
+**Units:** For each location that I observed, I 
+recorded the count of people observed wearing 
+headphones and not wearing headphones.
+
+
+
+
+
+Descriptives: Response Variable
+========================================================
+*Report the appropriate descriptive statistics of your 
+response variable.  You can display these in a table 
+like this*
+
+<center>**Percentage of Students Wearing Headphones**</center>
+
+```{r, echo=F}
+t <- Obs_df %>%
+  group_by(Race, Sex) %>%
+  
+  summarise(
+    avg      = round(mean(Yes.percent), 3),
+    median   = round(median(Yes.percent), 3),
+    min      = round(min(Yes.percent), 3),
+    max      = round(max(Yes.percent), 3),
+    variance = round(var(Yes.percent), 3),
+    range    = round((max - min), 3),
+    sd       = round(sd(Yes.percent), 3))
+knitr::kable(t, caption='Percent who were wearing headphones')
+rm(t)
+```
+
+
+
+
+Descriptives: Explanatory Variables
+========================================================
+*Report the appropriate descriptive statistics for two 
+of your main explanatory variables.  You can report 
+them in a table like the one above, or in a contingency 
+table.*
+
+<center>**Contingency Table Percentage of Students Wearing Headphones**</center>
+
+```{r, echo=F}
+ctable<- xtabs(Yes ~ Race + Sex, data=Obs_df)
+knitr::kable(t(ctable))
+```
+
+
+
+
+
+
+
+Discussion: Interpretation
+========================================================
+Interpret the results of your model in context.  
+
+**What does  this analysis suggest about your variables?**  
+Relate it back to the original goal outlined in your introduction!
+
+
+
+
+
+
+Discussion: Limitations
+========================================================
+Were there any limitations with your analysis?  
+- Was there a known bias in your sample collection?  
+- Did your data fail any assumptions?  
+- Can you think of any confounding variables that you didn’t control for?
+
+
+
+
+
+
+Assumptions
+========================================================
+Which assumptions did you confirm?  Include how you 
+checked each assumption, and if space permits, include any graphs you 
+created to check them.
+
+
+
+
+
+Interaction of Explanatory Vars
+========================================================
+Plot the interaction of your two explanatory variables (even if it is not significant).
+Briefly (1-2 sentences or bullet points) interpret the graph.
+
+
+
+
+
+Implications
+========================================================
+List at least one specific thing you would change if you were
+to replicate this research.  
+- How would that change impact your data or results?  
+- Did you find that the method you used was sufficient in answering your research question?
+
+
+
+
+
+
+
+Citation
+========================================================
+<small>
+Copyright (C) 2015 Hunter Ratliff
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+</small>
+
+```{r Not run, echo=F}  
+## What are the headers for our table?
+# names(Obs)
+
+## What are the types of data (for each header)
+# str(Obs)
+
+## Not run
+# Obs_simple <- Obs %>%                          # subject
+#   
+#   # Grab the observations that we care about -----------
+#   select(Race, Sex, Yes, No) %>%  # verb-ing these nouns
+# # select(-Location) %>%           ## does the same thing
+#   
+#   # Create a new variable called 'Y_net'
+#   mutate(
+#     Yes_net = Yes - No,
+#     Yes_per = Yes / (Yes + No)
+#   ) 
+## End(not run)
+
+# obj.graph <- Obs_df %>%
+#   group_by(Race, Sex) %>%
+#   
+#   summarise(
+#     Avg      = mean(Yes.percent),
+#     median   = median(Yes.percent),
+#     min      = min(Yes.percent),
+#     max      = max(Yes.percent),
+#     variance = var(Yes.percent),
+#     sd       = sd(Yes.percent)) %>% 
+#   
+#   ungroup() %>%
+#   mutate(var.factor = variance/min(variance))  %>%  
+#   melt(id.vars = c("Race", "Sex", "sd"), measure.vars = c("Avg", "median")) %>% 
+#   ggplot(aes(x=Race, y=value)) 
+# 
+# obj.graph + geom_jitter(aes(shape=variable, color=Sex))
+# obj.graph + geom_bar(aes(fill=Sex, linetype=variable), stat = "identity", size=2, position = "dodge", color="black") +
+#   scale_fill_fivethirtyeight() + scale_color_economist() + theme_fivethirtyeight()
+
+# t$Group <- paste0(t$Race, "_", t$Sex)
+# melt(t, id.vars = "Group", measure.vars = c("Yes", "No", "Y_net")) %>% 
+#   ggplot(aes(y=Group, x=variable, fill=value)) + geom_tile() + 
+#   scale_color_continuous(low="white", high="black")
+# 
+# ggplot(Obs_simple, aes())
+
+
+# Obs %>% 
+#   melt(id.vars = c("Race", "Sex"), measure.vars = c("Yes", "No")) %>%
+#   ggplot(aes(x=variable, y=value)) + 
+#   geom_jitter(aes(color=Race, shape=Sex), size=3)
+# 
+# summary(glm(Yes ~ Race + Sex, data=Obs))
+# summary(aov(Yes ~ Race + Sex, data=Obs))
+# qplot(x=Race, y=Yes, fill=Sex, data=Obs)
+
+```

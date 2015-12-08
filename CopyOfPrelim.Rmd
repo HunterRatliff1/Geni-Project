@@ -1,0 +1,220 @@
+---
+title: "SDS Report"
+author: "Genevieve Korst"
+date: "November 17, 2015"
+output: pdf
+---
+
+
+```{r global_options, include=FALSE}
+require(knitr)
+
+# setwd("~/Google Drive/100 - Publicly hosted/rootR/Bioinformatics")
+# opts_knit$set(root.dir = "..")
+
+## Sets output for figures
+knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='Figures/',
+                      echo=TRUE, warning=FALSE, message=FALSE, fig.align='center')
+```
+
+```{r LOAD | Packs, echo=F}
+sapply(c("magrittr", "dplyr", "reshape2", "ggplot2", "RCurl"), require, character.only=TRUE)  
+
+source("~/Github/Citations/Citation Function.R")
+```
+
+
+My sample subjects were students all over campus, and my sample size was 1875 obeservations at 11 different locations. The variables observed were the sex, race/ethnicity, and whether or not the student was listening to music at the time of observation. The units were individual people. 
+
+To collect this data, I observed Welch hall from 8:45 AM – 9:00 AM on Monday, and recorded the gender and ethnicity of each student that walked by, and whether or not they were listening to music. Then, from 10:45 – 11:00 AM, I observed Burdine hall, recording the same data. From 2:45 PM – 3:00 PM I observed RLM. On Tuesday I observed the GDC from 9:15 AM – 9:30 AM, then I observed Painter from 12:15 PM – 12:30 PM, finishing with the CLA from 3:15 PM – 3:30 PM. Wednesday, I observed the west mall from 8:45 AM – 9:00 AM, and then McCombs from 10:45 AM – 11:00 AM, finishing with the main mall from 12:45 PM – 1:00 PM. On Thursday, I observed the east mall from 9:15 AM -9:30 AM, the first floor of Jester from 12:15 PM – 12:30 PM, and the UTC from 1:45 PM – 2:00 PM. 
+
+I repeated this process three times, and observed these places on different days each new process. 
+
+
+```{r Load}
+url <- getURL("https://docs.google.com/spreadsheets/d/1Nwdb7NYm7uU6JtT_cbDf8gM1AImay-y55Z8VCKlxVFU/pub?gid=1089481875&single=true&output=csv")
+
+data.sheet <- read.csv(textConnection(url)) %>%
+  select(Location, Race, Sex, Yes, No)
+
+# qplot(data=Sheet, x=Yes, y=No, color=Location)
+# qplot(data=Sheet, x=Race, y=Yes-No, fill=Sex, geom="boxplot")
+```
+
+
+***
+## Response Variable
+
+***
+
+#### Statistics
+
+Our *Response Variable* can be measured as a difference between the number listening to music (`Yes`) and not listening to music (`No`). To create this response variable, I subtracted the following two vectors:
+
+```{r, echo=T}
+data.sheet$Response <- data.sheet$Yes - data.sheet$No
+```
+
+Running a `five number summary` on this response vector, we get the following result:
+
+```{r, echo=T}
+fivenum(data.sheet$Response)
+```
+
+Furthermore, we can infer from the standard deviation (SD = `r round(sd(data.sheet$Response), 2)`) that our data appears to have a wide spread. To further investigate, let's plot a histogram of the data to check for normality
+
+***
+
+#### Plots
+
+```{r Response histogram}
+suppressPackageStartupMessages(require(ggplot2))
+
+data.sheet$Response <- as.numeric(data.sheet$Response)
+
+
+ggplot(data.sheet, aes(x=Response)) +
+  # geom_histogram(aes(x=Yes), alpha=0.25, color="black", fill="green", binwidth=1) +
+  # geom_histogram(aes(x=No), alpha=0.25, color="black", fill="red", binwidth=1) +
+  geom_histogram(alpha=1, color="black", fill="#AAAAFF", binwidth=1) +
+  geom_density(fill=NA) + aes(y = ..count..) +
+  labs(x="Net Number of People Wearing Headphones",
+       title="Histogram of Response Variable")
+```
+
+A few inferences may be gathered from this these statistics/visualization. 
+
+The first inference is that we might have a binomial distribution (there is a peak at -3 and a smaller peak at -7). It's possible that a disproportionate sample size of white students (and an under representation of black students) could be skewing the data.
+
+However, if we disregard the possibility of a binomial distribution, our data looks to be normally distributed (without any obvious outliers). 
+
+
+***
+
+
+## Explanitory Variables
+
+In this experiment, I attempted to explain the response variable on the basis of two *Explanatory Variables*: Sex and Race/Ethnicity.
+
+***
+
+#### Sex: Histogram
+
+```{r Sex_Plot01}
+group_by(data.sheet, Sex) %>%
+  ggplot(aes(x=Response, fill=Sex)) + 
+  geom_histogram(alpha=1, color="black", binwidth=1) + 
+  facet_wrap("Sex") + 
+  labs(x="Net Number of People Wearing Headphones",
+       title="Histogram of Response Variable\nSplit by Observed Sex")
+```
+
+Based on initial impressions from the histogram above, it appears that wearing headphones isn't clearly influenced by sex. 
+
+#### Sex: Density
+
+```{r Sex_Plot02}
+group_by(data.sheet, Sex) %>%
+  ggplot(aes(x=Response, fill=Sex)) + 
+  geom_density(alpha=0.5, color="black") + 
+  # facet_wrap("Sex") + 
+  labs(x="Net Number of People Wearing Headphones",
+       title="Density of Response Variable\nSplit by Observed Sex")
+```
+
+This density plot represents that same distribution as the histogram above, but gives the edges a more smooth appearance. This plot strongly suggests that sex alone is not a good predictor of an individual's preference to wear headphones.
+
+***
+
+Sex: Statistics
+
+```{r}
+# Sum the 'Yes' & 'No' vectors to get our total sample size
+data.sheet$Total.Responses <- data.sheet$Yes + data.sheet$No
+
+# Make two new fata.frames, broken down by sex
+Male   <- filter(data.sheet, Sex=="Men") %>% select(-Sex)
+Female <- filter(data.sheet, Sex=="Women") %>% select(-Sex)
+```
+
+---
+
+```{r Male Stats, collapse=T}
+fivenum(Male$Response)
+sd(Male$Response)
+```
+
+<br>
+
+```{r Female Stats, collapse=T}
+fivenum(Female$Response)
+sd(Female$Response)
+```
+
+Again, it appears that there isn't a significant distinction between females and males. These broad statistics support my initial inferences based on the plots
+
+<br><br><hr>
+
+#### Race/Ethnicity: Histogram
+
+```{r RaceEthnicity_Plot01}
+group_by(data.sheet, Race) %>%
+  ggplot(aes(x=Response, fill=Race)) + 
+  geom_histogram(alpha=1, color="black", binwidth=1) + 
+  facet_wrap("Sex") + 
+  labs(x="Net Number of People Wearing Headphones",
+       title="Histogram of Response Variable\nSplit by Observed Race/Ethnicity")
+```
+
+Based on initial impressions from the histogram above, it appears whites are less likley to wear headphones, and blacks appear to be more likley to wear headphones (this would explain the second peak around -7). Asians and hispanics seem to fall somewhere in the middle, making up the majority of the responses recorded around that mean/median.
+
+#### Race/Ethnicity: Density
+
+```{r RaceEthnicity_Plot02}
+group_by(data.sheet, Race) %>%
+  ggplot(aes(x=Response, fill=Race)) + 
+  geom_density(alpha=0.5, color="black") + 
+  # facet_wrap("Sex") + 
+  labs(x="Net Number of People Wearing Headphones",
+       title="Density of Response Variable\nSplit by Observed Race/Ethnicity")
+```
+
+***
+
+#### Race/Ethnicity: Statistics
+
+```{r}
+White <- filter(data.sheet, Race=="White") %>% select(-Race)
+Hispanic <- filter(data.sheet, Race=="Hispanic") %>% select(-Race)
+Asian <- filter(data.sheet, Race=="Asian") %>% select(-Race)
+Black <- filter(data.sheet, Race=="Black")  %>% select(-Race)
+```
+
+***
+
+```{r White Stats, collapse=T}
+fivenum(White$Response)
+sd(White$Response)
+```
+
+```{r Hispanic Stats, collapse=T}
+fivenum(Hispanic$Response)
+sd(Hispanic$Response)
+```
+
+```{r Asian Stats, collapse=T}
+fivenum(Asian$Response)
+sd(Asian$Response)
+```
+
+```{r Black Stats, collapse=T}
+fivenum(Black$Response)
+sd(Black$Response)
+```
+
+These stats seem to suppourt my inference from the graphs, praticualry the variation between whites and blacks.
+
+
+```{r, include=FALSE}
+# knitr::kable(data.sheet)
+```

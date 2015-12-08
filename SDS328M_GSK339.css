@@ -1,0 +1,53 @@
+.section .reveal .state-background {
+  background: #F2A900;
+}
+
+.section .reveal h1 {
+  color: #005F86;
+    font-size: 3em;
+  font-family: 'Georgia'
+}
+
+.section .reveal h2 {
+  color: #005F86;
+    font-size: 1.5em;
+  font-family: 'Georgia';
+  margin-top: 0.13em;
+  margin-bottom: 0.13em;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.section .reveal p {
+  color: #BF5700;
+    font-size: 1em;
+  font-family: 'Open Sans';
+}
+
+.reveal p {
+  color: #382F2D;
+    font-size: 1em;
+  font-family: 'Open Sans';
+}
+
+.reveal h1, .reveal h2, .reveal h3 {
+  word-wrap: normal;
+  -moz-hyphens: none;
+}
+
+
+
+
+.footer {
+  color: #005F86;
+    background: #D6D2C4;
+    position: fixed;
+  bottom: 0%;
+  left: 0%;
+  text-align:center;
+  width:100%;
+}
+
+.descript {
+  color: #382F2D;
+}
