@@ -1,8 +1,7 @@
 ```{r global_options, include=FALSE}
 require(knitr)
-
-# setwd("~/Github/Geni Project")
-# opts_knit$set(root.dir = "..")
+## Ref
+# https://support.rstudio.com/hc/en-us/articles/200532307-Customizing-Fonts-and-Appearance
 
 ## Sets output for figures and other globals
 knitr::opts_chunk$set(fig.width=7, fig.height=7, fig.path='Figures/',
@@ -29,7 +28,7 @@ date: December 5, 2015
 font-family: 'Open Sans'
 
 
-<div class="footer">http://rpubs.com/HunterRatliff1/133534</div>
+<div class="footer">https://github.com/HunterRatliff1/Geni-Project</div>
 
 
 
@@ -62,7 +61,14 @@ and whether or not they listened to music.
 
 
 
+Data Collection
+========================================================
+type: sub-section
 
+1. **Randomization** - What did you do to get as “random” a 
+sample as possible?
+2. **Records** - How many sample records did you end up with
+3. **Outliers** - Did you remove any outliers?
 
 
 Data Collection: Randomization
@@ -117,7 +123,7 @@ qplot(data=Obs, x=Yes, y=No, color=Sex) +
 # Fig01_B
 qplot(data=Obs, x=Yes, y=No, color=Race) + 
   labs(x="Count of Students Wearing Headphones", y="Count of Students NOT\nWearing Headphones",
-       title="Count of Groups\nBy Race/Ethnicity") + theme_UT() + scale_color_gdocs() + coord_fixed()
+       title="Count of Groups By Race/Ethnicity") + theme_UT() + scale_color_gdocs() + coord_fixed()
 ```
 
 
@@ -125,9 +131,9 @@ qplot(data=Obs, x=Yes, y=No, color=Race) +
 
 
 
-Results table
+Results tables
 ========================================================
-
+type: sub-section
 **Report the results of your model in a table.**  
 *The table will look different depending on whether 
 you ran an ANOVA or a GLM, but be sure you include 
@@ -152,15 +158,13 @@ Obs_df[is.na(Obs_df)] <- 0
 
 Results table: GLM
 ========================================================
-
-<small>
 ```{r GLM, echo=F}
 ## General Linear Model  ---------------------------------
-glm(Yes.percent ~ Race + Sex, weights = Total.Obser,
-    data = Obs_df) %>% 
-  summary()
+obs.glm <- glm(Yes.percent ~ Race + Sex, weights = Total.Obser,
+    data = Obs_df) 
+# summary(obs.glm)
+anova(obs.glm)
 ```
-</small>
 
 
 Results table: ANOVA
@@ -173,6 +177,16 @@ aov(Yes.percent ~ Race + Sex, weights = Total.Obser,
   summary()
 ```
 </small>
+
+
+
+Methods
+========================================================
+type: sub-section
+
+1. **Model** - *What software did you use? What function(s)?*
+2. **Response variable** - *Description, Method of measurement, Units*
+3. **Explanatory variable** - *Description, Method of measurement, Units*
 
 
 Method: GLM/ANOVA
@@ -193,10 +207,6 @@ that listens to music on the way to class or not.
 2. Gender
 
 
-
-
-
-
 Method: Response Variable
 ========================================================
 
@@ -215,6 +225,7 @@ columns.
 
 **Units:**: Count of people
 
+
 Method: Explanatory Variables
 ========================================================
 *Briefly describe your explanatory variables, how 
@@ -230,13 +241,6 @@ broad catagories:
 2. Black (hispanic and non-hispanic)
 3. Hispanic (and white)
 4. White (non-hispanic)
-
-
-
-
-
-
-
 
 Method: Explanatory Variables
 ========================================================
@@ -359,6 +363,10 @@ to replicate this research.
 
 Citation
 ========================================================
+[Source code available on Github](https://github.com/HunterRatliff1/Geni-Project)
+
+<center>* * *</center>
+
 <small>
 Copyright (C) 2015 Hunter Ratliff
 

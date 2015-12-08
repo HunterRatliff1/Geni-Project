@@ -9,7 +9,7 @@ date: December 5, 2015
 font-family: 'Open Sans'
 
 
-<div class="footer">http://rpubs.com/HunterRatliff1/133534</div>
+<div class="footer">https://github.com/HunterRatliff1/Geni-Project</div>
 
 
 
@@ -42,7 +42,14 @@ and whether or not they listened to music.
 
 
 
+Data Collection
+========================================================
+type: sub-section
 
+1. **Randomization** - What did you do to get as “random” a 
+sample as possible?
+2. **Records** - How many sample records did you end up with
+3. **Outliers** - Did you remove any outliers?
 
 
 Data Collection: Randomization
@@ -83,9 +90,9 @@ Data Collection: Outliers
 
 
 
-Results table
+Results tables
 ========================================================
-
+type: sub-section
 **Report the results of your model in a table.**  
 *The table will look different depending on whether 
 you ran an ANOVA or a GLM, but be sure you include 
@@ -99,36 +106,20 @@ model fits the data.*
 Results table: GLM
 ========================================================
 
-<small>
-
 ```
+Analysis of Deviance Table
 
-Call:
-glm(formula = Yes.percent ~ Race + Sex, data = Obs_df, weights = Total.Obser)
+Model: gaussian, link: identity
 
-Deviance Residuals: 
-     Min        1Q    Median        3Q       Max  
--0.81231  -0.09431   0.00205   0.12764   0.83128  
+Response: Yes.percent
 
-Coefficients:
-              Estimate Std. Error t value Pr(>|t|)    
-(Intercept)   0.411906   0.016359  25.180   <2e-16 ***
-RaceBlack     0.005256   0.034266   0.153    0.878    
-RaceHispanic  0.010577   0.020694   0.511    0.611    
-RaceWhite     0.009433   0.017611   0.536    0.594    
-SexWomen     -0.004969   0.013231  -0.376    0.708    
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Terms added sequentially (first to last)
 
-(Dispersion parameter for gaussian family taken to be 0.08143281)
-
-    Null deviance: 6.7160  on 86  degrees of freedom
-Residual deviance: 6.6775  on 82  degrees of freedom
-AIC: Inf
-
-Number of Fisher Scoring iterations: 2
+     Df Deviance Resid. Df Resid. Dev
+NULL                    86     6.7160
+Race  3 0.026982        83     6.6890
+Sex   1 0.011483        82     6.6775
 ```
-</small>
 
 
 Results table: ANOVA
@@ -142,6 +133,16 @@ Sex          1  0.011 0.01148   0.141  0.708
 Residuals   82  6.677 0.08143               
 ```
 </small>
+
+
+
+Methods
+========================================================
+type: sub-section
+
+1. **Model** - *What software did you use? What function(s)?*
+2. **Response variable** - *Description, Method of measurement, Units*
+3. **Explanatory variable** - *Description, Method of measurement, Units*
 
 
 Method: GLM/ANOVA
@@ -162,10 +163,6 @@ that listens to music on the way to class or not.
 2. Gender
 
 
-
-
-
-
 Method: Response Variable
 ========================================================
 
@@ -184,6 +181,7 @@ columns.
 
 **Units:**: Count of people
 
+
 Method: Explanatory Variables
 ========================================================
 *Briefly describe your explanatory variables, how 
@@ -199,13 +197,6 @@ broad catagories:
 2. Black (hispanic and non-hispanic)
 3. Hispanic (and white)
 4. White (non-hispanic)
-
-
-
-
-
-
-
 
 Method: Explanatory Variables
 ========================================================
@@ -325,6 +316,10 @@ to replicate this research.
 
 Citation
 ========================================================
+[Source code available on Github](https://github.com/HunterRatliff1/Geni-Project)
+
+<center>* * *</center>
+
 <small>
 Copyright (C) 2015 Hunter Ratliff
 
