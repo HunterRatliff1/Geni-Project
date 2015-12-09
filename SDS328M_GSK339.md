@@ -52,37 +52,27 @@ sample as possible?
 3. **Outliers** - Did you remove any outliers?
 
 
-Data Collection: Randomization
+Data Collection
 ========================================================
 **What did you do to get as “random” a sample as possible?**
-
+<small>
 I observed the students rather than surveyed them in order 
 to prevent volunteer bias. I spread out my observations 
 over multiple days and various locations in order to 
 create a large enough and varied enough sample to 
 control for selection bias.
 
-
-Data Collection: Records
-========================================================
-**How many sample records did you end up with**
+**How many sample records did you end up with?** <code> 1875</code>, 
 
 
 
-The total record count was 
-<code> 1875</code>, 
-with an overall breakdown of:
+* <b>Yes:</b> <code> 782 </code> records
+* <b>No:</b> <code> 1093 </code> records
 
-* <b>Yes:</b> <code> 782 </code>
-* <b>No:</b> <code> 1093 </code>
-
-
-Data Collection: Outliers
-========================================================
-**Did you remove any outliers?** No, I saw no need to remove any outliers
-
-<img src="Figures/Fig01_A-1.png" title="plot of chunk Fig01_A" alt="plot of chunk Fig01_A" style="display: block; margin: auto;" />
-
+**Did you remove any outliers?** Yes, we remove a few of the 
+outliers for the black students, because there were so few 
+of them at a couple locations
+</small>
 
 
 
@@ -105,34 +95,59 @@ model fits the data.*
 
 Results table: GLM
 ========================================================
-
-```
-Analysis of Deviance Table
-
-Model: gaussian, link: identity
-
-Response: Yes.percent
-
-Terms added sequentially (first to last)
-
-     Df Deviance Resid. Df Resid. Dev
-NULL                    86     6.7160
-Race  3 0.026982        83     6.6890
-Sex   1 0.011483        82     6.6775
-```
-
-
-Results table: ANOVA
-========================================================
 <small>
 
 ```
-            Df Sum Sq Mean Sq F value Pr(>F)
-Race         3  0.027 0.00899   0.110  0.954
-Sex          1  0.011 0.01148   0.141  0.708
-Residuals   82  6.677 0.08143               
+
+Call:
+glm(formula = LinMod)
+
+Deviance Residuals: 
+     Min        1Q    Median        3Q       Max  
+-0.76636  -0.08820   0.00397   0.13156   0.66312  
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)   0.412165   0.013477  30.583   <2e-16 ***
+RaceBlack    -0.010690   0.029535  -0.362    0.718    
+RaceHispanic  0.010609   0.017039   0.623    0.535    
+RaceWhite     0.009461   0.014501   0.652    0.516    
+SexWomen     -0.005528   0.010937  -0.505    0.615    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for gaussian family taken to be 0.05520662)
+
+    Null deviance: 4.3203  on 81  degrees of freedom
+Residual deviance: 4.2509  on 77  degrees of freedom
+AIC: -231.69
+
+Number of Fisher Scoring iterations: 2
 ```
 </small>
+Results table: GLM Residuals Normality
+========================================================
+
+```r
+qqnorm(LinMod$residuals)
+qqline(LinMod$residuals)
+```
+
+<img src="Figures/GLM Residuals Normality-1.png" title="plot of chunk GLM Residuals Normality" alt="plot of chunk GLM Residuals Normality" style="display: block; margin: auto;" />
+
+Results table: GLM Residuals Variance
+========================================================
+
+```r
+plot(LinMod$fitted.values, LinMod$residuals,
+     xlab="Fitted Values", ylab="Residuals")
+abline(h=0)
+```
+
+<img src="Figures/GLM Residuals Variance-1.png" title="plot of chunk GLM Residuals Variance" alt="plot of chunk GLM Residuals Variance" style="display: block; margin: auto;" />
+
+
+
 
 
 
@@ -150,9 +165,9 @@ Method: GLM/ANOVA
 **What software did you use?  What function(s)?**
 
 I used RStudio to in my analysis, utilizing the 
-following packages
+following functions:
 
-<code> magrittr, dplyr, reshape2, ggplot2, RCurl, ggthemes </code>
+<code> qqnorm(), qqline(), plot(), lm()  </code>
 
 **Response variable:** The proportion of the population 
 that listens to music on the way to class or not.
@@ -227,8 +242,8 @@ like this*
 |:--------|:-----|-----:|------:|-----:|-----:|--------:|-----:|-----:|
 |Asian    |Men   | 0.423|  0.412| 0.316| 0.562|    0.004| 0.246| 0.061|
 |Asian    |Women | 0.392|  0.412| 0.231| 0.471|    0.004| 0.240| 0.063|
-|Black    |Men   | 0.417|  0.500| 0.000| 1.000|    0.126| 1.000| 0.356|
-|Black    |Women | 0.469|  0.429| 0.125| 1.000|    0.061| 0.875| 0.246|
+|Black    |Men   | 0.431|  0.500| 0.250| 0.500|    0.012| 0.250| 0.111|
+|Black    |Women | 0.416|  0.414| 0.125| 0.667|    0.033| 0.542| 0.181|
 |Hispanic |Men   | 0.410|  0.400| 0.350| 0.474|    0.002| 0.124| 0.039|
 |Hispanic |Women | 0.427|  0.429| 0.294| 0.478|    0.002| 0.184| 0.049|
 |White    |Men   | 0.423|  0.417| 0.395| 0.477|    0.000| 0.082| 0.022|
@@ -249,8 +264,8 @@ table.*
 
 |      | Asian| Black| Hispanic| White|
 |:-----|-----:|-----:|--------:|-----:|
-|Men   |    80|    12|       81|   210|
-|Women |    65|    24|       92|   218|
+|Men   |    80|     9|       81|   210|
+|Women |    65|    22|       92|   218|
 
 
 

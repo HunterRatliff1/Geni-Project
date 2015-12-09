@@ -8,7 +8,7 @@ knitr::opts_chunk$set(fig.width=7, fig.height=7, fig.path='Figures/',
                       echo=TRUE, warning=FALSE, message=FALSE, fig.align='center')
 
 # Packages
-packs <- c("magrittr", "dplyr", "reshape2", "ggplot2", "RCurl", "ggthemes")
+packs <- c("magrittr", "dplyr", "reshape2", "ggplot2", "RCurl", "ggthemes", "RColorBrewer")
 sapply(packs, require, character.only=TRUE)  
 
 # Define theme for ggplots
@@ -71,59 +71,49 @@ sample as possible?
 3. **Outliers** - Did you remove any outliers?
 
 
-Data Collection: Randomization
+Data Collection
 ========================================================
 **What did you do to get as “random” a sample as possible?**
-
+<small>
 I observed the students rather than surveyed them in order 
 to prevent volunteer bias. I spread out my observations 
 over multiple days and various locations in order to 
 create a large enough and varied enough sample to 
 control for selection bias.
 
+**How many sample records did you end up with?** <code> `r sum(Obs$Yes) + sum(Obs$No)`</code>, 
 
-Data Collection: Records
-========================================================
-**How many sample records did you end up with**
-
-```{r, include=FALSE}
-# group_by(Obs_df, Race, Sex) %>%
-#   summarise(
-#     Obs.n    = sum(Total.Obser),
-#     Yes.avg  = mean(Yes.percent),
-#     Yes.med  = median(Yes.percent),
-#     Yes.min  = min(Yes.percent),
-#     Yes.max  = max(Yes.percent),
-#     Yes.var  = var(Yes.percent),
-#     Yes.sd   = sd(Yes.percent)) %>% 
-#   
-#   ungroup()
+```{r, include=FALSE, eval=F}
+group_by(Obs_df, Race, Sex) %>%
+  summarise(
+    Obs.n    = sum(Total.Obser),
+    Yes.avg  = mean(Yes.percent),
+    Yes.med  = median(Yes.percent),
+    Yes.min  = min(Yes.percent),
+    Yes.max  = max(Yes.percent),
+    Yes.var  = var(Yes.percent),
+    Yes.sd   = sd(Yes.percent)) %>% 
+  
+  ungroup()
 ```
 
-The total record count was 
-<code> `r sum(Obs$Yes) + sum(Obs$No)`</code>, 
-with an overall breakdown of:
+* <b>Yes:</b> <code> `r sum(Obs$Yes)` </code> records
+* <b>No:</b> <code> `r sum(Obs$No)` </code> records
 
-* <b>Yes:</b> <code> `r sum(Obs$Yes)` </code>
-* <b>No:</b> <code> `r sum(Obs$No)` </code>
+**Did you remove any outliers?** Yes, we remove a few of the 
+outliers for the black students, because there were so few 
+of them at a couple locations
+</small>
+```{r Fig01_A, echo=FALSE, eval=FALSE}
+# # Fig01_A
+# qplot(data=Obs, x=Yes, y=No, color=Sex) + 
+#   labs(x="Count of Students Wearing Headphones", y="Count of Students NOT\nWearing Headphones",
+#        title="Count of Groups\nBy Sex") + scale_color_wsj() + theme_UT() #+ coord_fixed()
 
-
-Data Collection: Outliers
-========================================================
-**Did you remove any outliers?** No, I saw no need to remove any outliers
-
-```{r Fig01_A, echo=F}
-# Fig01_A
-qplot(data=Obs, x=Yes, y=No, color=Sex) + 
-  labs(x="Count of Students Wearing Headphones", y="Count of Students NOT\nWearing Headphones",
-       title="Count of Groups\nBy Sex") + scale_color_wsj() + theme_UT() #+ coord_fixed()
-```  
-
-```{r Fig01_B, echo=FALSE, eval=FALSE}
-# Fig01_B
-qplot(data=Obs, x=Yes, y=No, color=Race) + 
-  labs(x="Count of Students Wearing Headphones", y="Count of Students NOT\nWearing Headphones",
-       title="Count of Groups By Race/Ethnicity") + theme_UT() + scale_color_gdocs() + coord_fixed()
+# # Fig01_B
+# qplot(data=Obs, x=Yes, y=No, color=Race) + 
+#   labs(x="Count of Students Wearing Headphones", y="Count of Students NOT\nWearing Headphones",
+#        title="Count of Groups By Race/Ethnicity") + theme_UT() + scale_color_gdocs() + coord_fixed()
 ```
 
 
@@ -148,35 +138,57 @@ Obs_df <- Obs %>%             # Save the result as 'Obs_df'
   
   mutate(                         # Add these two variables
     Total.Obser = 0 + Yes + No, 
-    Yes.percent = Yes / Total.Obser)
+    Yes.percent = Yes / Total.Obser) %>%
+  filter(Yes.percent!=0.00, Yes.percent!=1.00)
 
 ## Because we had a divide by zero error, replace
 ## all cases of NA in the data.frame with 0
-Obs_df[is.na(Obs_df)] <- 0
+# Obs_df[is.na(Obs_df)] <- 0
 ```
 
 
 Results table: GLM
 ========================================================
-```{r GLM, echo=F}
-## General Linear Model  ---------------------------------
-obs.glm <- glm(Yes.percent ~ Race + Sex, weights = Total.Obser,
-    data = Obs_df) 
-# summary(obs.glm)
-anova(obs.glm)
-```
-
-
-Results table: ANOVA
-========================================================
 <small>
-```{r ANOVA, echo=F}
-## General Linear Model  ---------------------------------
-aov(Yes.percent ~ Race + Sex, weights = Total.Obser,
-    data = Obs_df) %>% 
-  summary()
+```{r GLM, echo=F}
+## General Linear Model  
+LinMod <- lm(Yes.percent ~ Race + Sex, 
+   weights = Total.Obser, data = Obs_df)
+glm(LinMod) %>% summary()
 ```
 </small>
+Results table: GLM Residuals Normality
+========================================================
+```{r GLM Residuals Normality}
+qqnorm(LinMod$residuals)
+qqline(LinMod$residuals)
+```
+
+Results table: GLM Residuals Variance
+========================================================
+```{r GLM Residuals Variance}
+plot(LinMod$fitted.values, LinMod$residuals,
+     xlab="Fitted Values", ylab="Residuals")
+abline(h=0)
+```
+
+```{r, eval=F, echo=F}
+car::leveneTest(Yes.percent~Sex, data=Obs_df)
+qplot(data=Obs_df, x=Yes.percent, geom="density", fill=Sex, alpha=I(0.5)) + 
+  theme_UT() + labs(x="Percent Wearing Headphones", y="Density") + 
+  scale_fill_brewer(type="qual", palette = "Set1")
+
+qplot(data=Obs_df, x=Yes.percent, geom="density", fill=Race, alpha=I(0.5)) + 
+  theme_UT() + labs(x="Percent Wearing Headphones", y="Density") + 
+  scale_fill_stata() + xlim(c(0.25, 0.75))
+
+# qplot(data=Obs_df, x=Yes.percent, geom="density", fill=Sex, alpha=0.5)
+# qplot(data=Obs_df, x=Yes.percent, geom="density", fill=Race, alpha=0.5)
+# qplot(data=Obs_df, x=Yes.percent, geom="histogram", fill=Race, alpha=0.5)
+# qplot(data=Obs_df, y=Yes.percent, x=Race, fill=Sex, geom="boxplot")
+# qplot(data=Obs_df, y=Yes.percent, x=Sex, fill=Race, geom="boxplot")
+```
+
 
 
 
@@ -194,9 +206,9 @@ Method: GLM/ANOVA
 **What software did you use?  What function(s)?**
 
 I used RStudio to in my analysis, utilizing the 
-following packages
+following functions:
 
-<code> `r packs` </code>
+<code> qqnorm(), qqline(), plot(), lm()  </code>
 
 **Response variable:** The proportion of the population 
 that listens to music on the way to class or not.
