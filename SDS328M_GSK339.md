@@ -124,6 +124,33 @@ AIC: -231.69
 
 Number of Fisher Scoring iterations: 2
 ```
+
+```
+
+Call:
+lm(formula = Yes.percent ~ Race * Sex, data = Obs_df, weights = Total.Obser)
+
+Weighted Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.73812 -0.07998 -0.00105  0.11486  0.68758 
+
+Coefficients:
+                       Estimate Std. Error t value Pr(>|t|)    
+(Intercept)            0.421053   0.017129  24.581   <2e-16 ***
+RaceBlack              0.007519   0.054296   0.138    0.890    
+RaceHispanic          -0.011962   0.023978  -0.499    0.619    
+RaceWhite              0.001483   0.020139   0.074    0.942    
+SexWomen              -0.024711   0.025166  -0.982    0.329    
+RaceBlack:SexWomen    -0.017895   0.065314  -0.274    0.785    
+RaceHispanic:SexWomen  0.045527   0.034284   1.328    0.188    
+RaceWhite:SexWomen     0.017414   0.029183   0.597    0.553    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.2361 on 74 degrees of freedom
+Multiple R-squared:  0.04515,	Adjusted R-squared:  -0.04518 
+F-statistic: 0.4998 on 7 and 74 DF,  p-value: 0.8318
+```
 </small>
 Results table: GLM Residuals Normality
 ========================================================
@@ -167,7 +194,7 @@ Method: GLM/ANOVA
 I used RStudio to in my analysis, utilizing the 
 following functions:
 
-<code> qqnorm(), qqline(), plot(), lm()  </code>
+<code> qqnorm(), qqline(), plot(), lm()2  </code>
 
 **Response variable:** The proportion of the population 
 that listens to music on the way to class or not.

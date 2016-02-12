@@ -155,6 +155,11 @@ Results table: GLM
 LinMod <- lm(Yes.percent ~ Race + Sex, 
    weights = Total.Obser, data = Obs_df)
 glm(LinMod) %>% summary()
+
+## Interaction
+LinMod2 <- lm(Yes.percent ~ Race * Sex, 
+   weights = Total.Obser, data = Obs_df)
+summary(LinMod2)
 ```
 </small>
 Results table: GLM Residuals Normality
@@ -208,7 +213,7 @@ Method: GLM/ANOVA
 I used RStudio to in my analysis, utilizing the 
 following functions:
 
-<code> qqnorm(), qqline(), plot(), lm()  </code>
+<code> qqnorm(), qqline(), plot(), lm()2  </code>
 
 **Response variable:** The proportion of the population 
 that listens to music on the way to class or not.
