@@ -4,5 +4,5 @@ Project for SDS 328M (Fall '15) at UT Austin (http://rpubs.com/HunterRatliff1/13
 This is a project that I helped my girlfriend with for her stats class. The report can be found
 on RPubs: 
 
-[Preliminary Report](http://rpubs.com/HunterRatliff1/Geni_Project_Preliminary)
+[Preliminary Report](http://rpubs.com/HunterRatliff1/Geni_Project_Preliminary)   
 [Final Slides](http://rpubs.com/HunterRatliff1/Geni_Project_Slides)
